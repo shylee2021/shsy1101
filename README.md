@@ -1,7 +1,5 @@
 # Wedding Invitation
 
-이상혁과 이서윤의 모바일 청첩장입니다.
-
 ## 실행
 
 Node.js 24 LTS와 pnpm이 필요합니다.
