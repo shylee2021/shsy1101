@@ -1,20 +1,25 @@
-# 상혁과 서윤의 모바일 청첩장
+# Wedding Invitation
 
-React, TypeScript, Vite로 만든 GitHub Pages용 정적 사이트입니다. 현재는 준비 중 화면만 제공합니다.
+이상혁과 이서윤의 모바일 청첩장입니다.
 
 ## 실행
+
+Node.js 24 LTS와 pnpm이 필요합니다.
 
 ```bash
 pnpm install
 pnpm dev
 ```
 
-## 검사 및 빌드
+청첩장 정보는 `src/config.ts`에서 관리합니다.
+
+## 빌드 확인
 
 ```bash
-pnpm typecheck
 pnpm build
 pnpm preview
 ```
 
-`main` 브랜치가 GitHub에 푸시되면 `.github/workflows/deploy-pages.yml`이 `dist`를 GitHub Pages에 배포합니다. 저장소의 **Settings → Pages → Source**는 **GitHub Actions**로 설정해야 합니다.
+## 배포
+
+`main` 브랜치에 푸시하면 GitHub Pages에 자동 배포됩니다.

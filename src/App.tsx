@@ -1,3 +1,5 @@
+import { invitation } from './config'
+
 export default function App() {
   return (
     <main className="site">
@@ -13,7 +15,7 @@ export default function App() {
         <div className="message">
           <p>소중한 분들께 전할</p>
           <h1 id="notice-title">
-            <span>상혁과 서윤의</span>
+            <span>{invitation.couple.groom.shortName}과 {invitation.couple.bride.shortName}의</span>
             초대장을 준비하고 있습니다.
           </h1>
           <p className="description">
@@ -21,12 +23,12 @@ export default function App() {
           </p>
         </div>
 
-        <time dateTime="2026-11-01T14:00:00+09:00">
-          <span>2026. 11. 01</span>
-          일요일 오후 2시
+        <time dateTime={invitation.wedding.dateTime}>
+          <span>{invitation.wedding.date}</span>
+          {invitation.wedding.time}
         </time>
 
-        <p className="names">SANGHYUK LEE · SEOYOON LEE</p>
+        <p className="names">{invitation.couple.groom.englishName} · {invitation.couple.bride.englishName}</p>
       </article>
     </main>
   )
