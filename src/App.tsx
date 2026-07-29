@@ -52,7 +52,7 @@ export default function App() {
             <h2 id="invitation-title">소중한 당신께</h2>
           </Reveal>
           <Reveal className="letter__copy" delay={100}>
-            {wedding.greeting.map((line, index) => <p key={line} className={index === 1 || index === 3 ? 'letter__new-stanza' : ''}>{line}</p>)}
+            {wedding.greeting.map((line, index) => <p key={line} className={index === 3 ? 'letter__new-stanza' : ''}>{line}</p>)}
           </Reveal>
           <Reveal className="letter__signature" delay={160}>
             <span>{couple.groom.shortName}</span><i>그리고</i><span>{couple.bride.shortName}</span>
