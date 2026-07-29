@@ -1,9 +1,14 @@
 import { useState } from 'react'
 import hero from './assets/hero.jpg'
 import heroSmall from './assets/hero-small.jpg'
+import kakaoMapIcon from './assets/maps/kakao.png'
+import naverMapIcon from './assets/maps/naver.png'
+import tmapIcon from './assets/maps/tmap.png'
 import { copyText, downloadCalendar, shareInvitation } from './actions'
 import { CalendarGrid, GalleryViewer, Icon, Reveal, Toast, useToast, type GalleryImage } from './components'
-import { invitation, kakaoMapUrl, naverMapUrl } from './config'
+import { invitation, kakaoMapUrl, naverMapUrl, tmapAndroidMapUrl, tmapIosMapUrl } from './config'
+
+const tmapMapUrl = /iPhone|iPad|iPod/.test(navigator.userAgent) ? tmapIosMapUrl : tmapAndroidMapUrl
 
 const gallery = Object.entries(import.meta.glob<string>('./assets/gallery/*.{jpg,jpeg,png,webp,avif}', {
   eager: true,
@@ -65,11 +70,11 @@ export default function App() {
             <h2 id="family-title" className="sr-only">혼주와 신랑 신부 소개</h2>
             <div className="family__line">
               <p><strong>{couple.groom.parents.join(' · ')}</strong><span>의 {couple.groom.relation}</span></p>
-              <b>{couple.groom.name}</b>
+              <div className="family__person"><span>신랑</span><b>{couple.groom.name}</b></div>
             </div>
-            <div className="family__line family__line--bride">
+            <div className="family__line">
               <p><strong>{couple.bride.parents.join(' · ')}</strong><span>의 {couple.bride.relation}</span></p>
-              <b>{couple.bride.name}</b>
+              <div className="family__person"><span>신부</span><b>{couple.bride.name}</b></div>
             </div>
           </Reveal>
         </section>
@@ -112,8 +117,9 @@ export default function App() {
             <address>{wedding.venue.address}</address>
             <p className="venue__transit">{wedding.venue.transport}</p>
             <nav className="venue__links" aria-label="지도 서비스">
-              <a href={naverMapUrl} target="_blank" rel="noreferrer"><Icon name="map" /> 네이버 지도</a>
-              <a href={kakaoMapUrl} target="_blank" rel="noreferrer"><Icon name="map" /> 카카오맵</a>
+              <a href={naverMapUrl} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 주소 보기"><img src={naverMapIcon} alt="" />네이버</a>
+              <a href={kakaoMapUrl} target="_blank" rel="noreferrer" aria-label="카카오맵에서 주소 보기"><img src={kakaoMapIcon} alt="" />카카오</a>
+              <a href={tmapMapUrl} aria-label="티맵에서 주소 보기"><img src={tmapIcon} alt="" />티맵</a>
             </nav>
           </Reveal>
         </section>

@@ -54,6 +54,8 @@ export const calendarDays: Array<number | null> = [
   29, 30, null, null, null, null, null,
 ]
 
-const locationQuery = encodeURIComponent(`${invitation.wedding.venue.name} ${invitation.wedding.venue.address}`)
+const locationQuery = encodeURIComponent(invitation.wedding.venue.address)
 export const naverMapUrl = `https://map.naver.com/p/search/${locationQuery}`
 export const kakaoMapUrl = `https://map.kakao.com/link/search/${locationQuery}`
+export const tmapAndroidMapUrl = `tmap://search?name=${locationQuery}`
+export const tmapIosMapUrl = `tmap://?search=${locationQuery}`
