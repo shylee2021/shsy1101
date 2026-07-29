@@ -85,14 +85,14 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .date-section__intro h2 { margin: 0 0 28px; font: 300 var(--font-date-title)/1.55 var(--font-serif); letter-spacing: -.02em; }
 .date-section__intro h2 span { display: block; margin-bottom: 20px; color: var(--olive); font: 400 var(--font-small)/1 var(--font-sans); letter-spacing: .28em; }
 .date-section__intro > p:last-child { margin: 0; color: var(--muted); font-size: var(--font-meta); line-height: 1.9; }
-.date-section__calendar { padding: 28px 0 0 12%; display: grid; border-top: 1px solid var(--line); }
+.date-section__calendar { padding-top: 28px; display: grid; border-top: 1px solid var(--line); }
 .calendar-grid { width: 100%; border-collapse: collapse; table-layout: fixed; }
-.calendar-grid caption { padding-bottom: 22px; text-align: left; font: 400 var(--font-lead)/1 var(--font-serif); letter-spacing: .15em; }
+.calendar-grid caption { padding: 0 calc(100% / 14 - 17px) 22px; text-align: left; font: 400 var(--font-lead)/1 var(--font-serif); letter-spacing: .15em; }
 .calendar-grid th { color: var(--muted); font-size: var(--font-label); font-weight: 400; }
 .calendar-grid th, .calendar-grid td { height: 42px; text-align: center; font-size: var(--font-meta); }
 .calendar-grid td:first-child, .calendar-grid th:first-child { color: var(--sunday); }
 .calendar-grid .is-wedding-day time { display: inline-grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--calendar-accent); color: var(--calendar-on-accent); }
-.text-action { min-height: 44px; margin-top: 24px; padding: 0; justify-self: end; display: flex; align-items: center; gap: 10px; border: 0; border-bottom: 1px solid currentColor; background: none; color: var(--olive); font-size: var(--font-ui); cursor: pointer; }
+.text-action { min-height: 44px; margin: 24px calc(100% / 14 - 7px) 0 0; padding: 0; justify-self: end; display: flex; align-items: center; gap: 10px; border: 0; border-bottom: 1px solid currentColor; background: none; color: var(--olive); font-size: var(--font-ui); cursor: pointer; }
 .photo-essay { padding: 110px 0 120px; background: var(--paper); }
 .photo-essay__heading { padding: 0 28px 68px; display: grid; grid-template-columns: auto 1fr; gap: 8px 20px; align-items: baseline; }
 .photo-essay__heading span { color: var(--olive); font-size: var(--font-small); }
