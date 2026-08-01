@@ -23,8 +23,10 @@ const gallery = Object.entries(import.meta.glob<string>('./assets/gallery/*.{jpg
 
 export default function App() {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
+  const [showAllPhotos, setShowAllPhotos] = useState(false)
   const toast = useToast()
   const { couple, wedding, account } = invitation
+  const visibleGallery = showAllPhotos ? gallery : gallery.slice(0, invitation.gallery.previewCount)
 
   async function copyAccount() {
     const copied = await copyText(`${account.bank} ${account.number} ${account.holder}`)
@@ -97,8 +99,8 @@ export default function App() {
           <Reveal className="photo-essay__heading">
             <span>03</span><h2 id="gallery-title">두 사람의 장면들</h2><p>사진을 누르면 크게 볼 수 있습니다.</p>
           </Reveal>
-          <div className="photo-essay__grid">
-            {gallery.map((image, index) => (
+          <div className="photo-essay__grid" id="photo-essay-grid">
+            {visibleGallery.map((image, index) => (
               <Reveal className={`photo-essay__item item-${index + 1}`} delay={(index % 2) * 90} key={index}>
                 <button type="button" onClick={() => setViewerIndex(index)} aria-label={`${index + 1}번 사진 크게 보기`}>
                   <img src={image.src} alt={image.alt} loading="lazy" />
@@ -107,6 +109,11 @@ export default function App() {
               </Reveal>
             ))}
           </div>
+          {visibleGallery.length < gallery.length && (
+            <button className="photo-essay__more" type="button" aria-controls="photo-essay-grid" onClick={() => setShowAllPhotos(true)}>
+              사진 더보기 <span aria-hidden="true">+{gallery.length - visibleGallery.length}</span>
+            </button>
+          )}
         </section>
 
         <section className="venue section-pad" aria-labelledby="venue-title">

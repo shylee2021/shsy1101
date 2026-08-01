@@ -118,6 +118,8 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .photo-essay__item:nth-child(n+6) { grid-column: 2 / 8; }
 .photo-essay__item:nth-child(even):nth-child(n+6) { grid-column: 7 / 13; margin-top: 100px; }
 .photo-essay__item:nth-child(n+6) button { aspect-ratio: 4 / 5; }
+.photo-essay__more { min-height: 48px; margin: 64px auto 0; padding: 0 20px; display: flex; align-items: center; gap: 10px; border: 1px solid var(--line); background: transparent; font-size: var(--font-ui); cursor: pointer; }
+.photo-essay__more span { color: var(--muted); font-size: var(--font-small); }
 .venue { background: #31342d; color: #f4f0e6; }
 .venue .kicker { color: #b9bca6; }
 .venue h2 { margin: 0 0 54px; font: 300 var(--font-venue-title)/1.3 var(--font-serif); letter-spacing: .08em; }
@@ -142,7 +144,7 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .account__body strong { font-size: var(--font-compact); font-weight: 500; letter-spacing: .03em; }
 .account__body button { min-height: 44px; padding: 0 12px; display: inline-flex; align-items: center; gap: 7px; border: 1px solid var(--line); background: transparent; font-size: var(--font-small); cursor: pointer; }
 .share-action { min-height: 48px; margin: 24px auto 0; padding: 0 22px; display: inline-flex; align-items: center; gap: 9px; border: 1px solid var(--ink); background: transparent; font-size: var(--font-ui); cursor: pointer; }
-.cover__scroll, .text-action, .venue__links a, .account summary, .account__body button, .share-action { white-space: nowrap; }
+.cover__scroll, .text-action, .photo-essay__more, .venue__links a, .account summary, .account__body button, .share-action { white-space: nowrap; }
 .closing__names { margin: 110px 0 0; color: var(--muted); font: 400 var(--font-label)/1 var(--font-latin); letter-spacing: .22em; }
 .closing__names i { margin: 0 6px; color: var(--olive); }
 .reveal { opacity: 0; transform: translateY(22px); transition: opacity .75s ease var(--reveal-delay), transform .75s cubic-bezier(.22,.68,.24,1) var(--reveal-delay); }

@@ -36,6 +36,9 @@ export const invitation = {
       '귀한 걸음으로 자리를 빛내주시기 바랍니다.',
     ],
   },
+  gallery: {
+    previewCount: 5,
+  },
   account: {
     bank: '국민은행',
     number: '445302-04-127854',
