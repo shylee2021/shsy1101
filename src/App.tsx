@@ -6,6 +6,8 @@ import naverMapIcon from './assets/maps/naver.png'
 import tmapIcon from './assets/maps/tmap.png'
 import { copyText, downloadCalendar, shareInvitation } from './actions'
 import { CalendarGrid, GalleryGrid, GalleryViewer, Icon, Reveal, Toast, useToast, type GalleryImage } from './components'
+import Guestbook from './Guestbook'
+import Rsvp from './Rsvp'
 import { invitation, kakaoMapUrl, naverMapUrl, tmapAndroidMapUrl, tmapIosMapUrl } from './config'
 
 const tmapMapUrl = /iPhone|iPad|iPod/.test(navigator.userAgent) ? tmapIosMapUrl : tmapAndroidMapUrl
@@ -132,6 +134,9 @@ export default function App() {
             </nav>
           </Reveal>
         </section>
+
+        <Rsvp notify={toast.show} />
+        <Guestbook notify={toast.show} />
 
         <section className="closing section-pad" aria-labelledby="closing-title">
           <Reveal>
