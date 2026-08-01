@@ -1,11 +1,11 @@
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import hero from './assets/hero.jpg'
 import heroSmall from './assets/hero-small.jpg'
 import kakaoMapIcon from './assets/maps/kakao.png'
 import naverMapIcon from './assets/maps/naver.png'
 import tmapIcon from './assets/maps/tmap.png'
 import { copyText, downloadCalendar, shareInvitation } from './actions'
-import { CalendarGrid, GalleryViewer, Icon, Reveal, Toast, useToast, type GalleryImage } from './components'
+import { CalendarGrid, GalleryGrid, GalleryViewer, Icon, Reveal, Toast, useToast, type GalleryImage } from './components'
 import { invitation, kakaoMapUrl, naverMapUrl, tmapAndroidMapUrl, tmapIosMapUrl } from './config'
 
 const tmapMapUrl = /iPhone|iPad|iPod/.test(navigator.userAgent) ? tmapIosMapUrl : tmapAndroidMapUrl
@@ -23,10 +23,12 @@ const gallery = Object.entries(import.meta.glob<string>('./assets/gallery/*.{jpg
 
 export default function App() {
   const [viewerIndex, setViewerIndex] = useState<number | null>(null)
-  const [showAllPhotos, setShowAllPhotos] = useState(false)
+  const [galleryGridOpen, setGalleryGridOpen] = useState(false)
+  const galleryButtonRef = useRef<HTMLButtonElement>(null)
+  const viewerReturnToGrid = useRef(false)
   const toast = useToast()
   const { couple, wedding, account } = invitation
-  const visibleGallery = showAllPhotos ? gallery : gallery.slice(0, invitation.gallery.previewCount)
+  const visibleGallery = gallery.slice(0, invitation.gallery.previewCount)
 
   async function copyAccount() {
     const copied = await copyText(`${account.bank} ${account.number} ${account.holder}`)
@@ -99,10 +101,10 @@ export default function App() {
           <Reveal className="photo-essay__heading">
             <span>03</span><h2 id="gallery-title">두 사람의 장면들</h2><p>사진을 누르면 크게 볼 수 있습니다.</p>
           </Reveal>
-          <div className="photo-essay__grid" id="photo-essay-grid">
+          <div className="photo-essay__grid">
             {visibleGallery.map((image, index) => (
               <Reveal className={`photo-essay__item item-${index + 1}`} delay={(index % 2) * 90} key={index}>
-                <button type="button" onClick={() => setViewerIndex(index)} aria-label={`${index + 1}번 사진 크게 보기`}>
+                <button type="button" onClick={() => { viewerReturnToGrid.current = false; setViewerIndex(index) }} aria-label={`${index + 1}번 사진 크게 보기`}>
                   <img src={image.src} alt={image.alt} loading="lazy" />
                 </button>
                 <span>SCENE {String(index + 1).padStart(2, '0')}</span>
@@ -110,8 +112,8 @@ export default function App() {
             ))}
           </div>
           {visibleGallery.length < gallery.length && (
-            <button className="photo-essay__more" type="button" aria-controls="photo-essay-grid" onClick={() => setShowAllPhotos(true)}>
-              사진 더보기 <span aria-hidden="true">+{gallery.length - visibleGallery.length}</span>
+            <button ref={galleryButtonRef} className="photo-essay__more" type="button" aria-haspopup="dialog" onClick={() => setGalleryGridOpen(true)}>
+              사진 전체보기 <span aria-hidden="true">{gallery.length}</span>
             </button>
           )}
         </section>
@@ -148,7 +150,13 @@ export default function App() {
         </section>
       </main>
 
-      <GalleryViewer images={gallery} index={viewerIndex} onIndexChange={setViewerIndex} onClose={() => setViewerIndex(null)} />
+      <GalleryGrid
+        images={gallery}
+        open={galleryGridOpen}
+        onSelect={(index) => { viewerReturnToGrid.current = true; setGalleryGridOpen(false); setViewerIndex(index) }}
+        onClose={() => setGalleryGridOpen(false)}
+      />
+      <GalleryViewer images={gallery} index={viewerIndex} returnFocus={viewerReturnToGrid.current ? galleryButtonRef : undefined} onIndexChange={setViewerIndex} onClose={() => setViewerIndex(null)} />
       <Toast message={toast.message} />
     </div>
   )

@@ -78,9 +78,49 @@ export function useToast() {
   return { message, show }
 }
 
-export function GalleryViewer({ images, index, onIndexChange, onClose }: {
+export function GalleryGrid({ images, open, onSelect, onClose }: {
+  images: GalleryImage[]
+  open: boolean
+  onSelect: (index: number) => void
+  onClose: () => void
+}) {
+  const dialogRef = useRef<HTMLDialogElement>(null)
+  const titleId = useId()
+
+  useEffect(() => {
+    const dialog = dialogRef.current
+    if (!dialog) return
+    if (open && !dialog.open) dialog.showModal()
+    if (!open && dialog.open) dialog.close()
+  }, [open])
+
+  return (
+    <dialog ref={dialogRef} className="gallery-grid-view" aria-labelledby={titleId} onClose={onClose}>
+      {open && (
+        <>
+          <header className="gallery-grid-view__header">
+            <p>PHOTO ARCHIVE · {String(images.length).padStart(2, '0')}</p>
+            <h2 id={titleId}>모든 사진</h2>
+            <button type="button" onClick={onClose}>닫기</button>
+          </header>
+          <div className="gallery-grid-view__grid">
+            {images.map((image, index) => (
+              <button type="button" onClick={() => { dialogRef.current?.close(); onSelect(index) }} aria-label={`${index + 1}번 사진 크게 보기`} key={index}>
+                <img src={image.src} alt="" loading="lazy" />
+                <span>{String(index + 1).padStart(2, '0')}</span>
+              </button>
+            ))}
+          </div>
+        </>
+      )}
+    </dialog>
+  )
+}
+
+export function GalleryViewer({ images, index, returnFocus, onIndexChange, onClose }: {
   images: GalleryImage[]
   index: number | null
+  returnFocus?: { readonly current: HTMLElement | null }
   onIndexChange: (index: number) => void
   onClose: () => void
 }) {
@@ -104,7 +144,8 @@ export function GalleryViewer({ images, index, onIndexChange, onClose }: {
     closeRef.current?.focus()
     return () => {
       document.body.style.overflow = oldOverflow
-      previousFocus.current?.focus()
+      const focusTarget = returnFocus?.current ?? previousFocus.current
+      focusTarget?.focus()
     }
   }, [isOpen])
 
