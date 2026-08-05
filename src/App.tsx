@@ -4,13 +4,10 @@ export default function App() {
   return (
     <main className="site">
       <article className="notice" aria-labelledby="notice-title">
-        <p className="folio">WEDDING INVITATION · 2026</p>
-
-        <div className="monogram" aria-hidden="true">
-          <span />
+        <header className="folio">
+          <span>WEDDING INVITATION · 2026</span>
           <b>S <i>&amp;</i> S</b>
-          <span />
-        </div>
+        </header>
 
         <div className="message">
           <p>소중한 분들께 전할</p>
