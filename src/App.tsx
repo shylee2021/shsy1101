@@ -158,14 +158,46 @@ export default function App() {
           <Reveal>
             <p className="kicker">LOCATION</p>
             <h2 id="venue-title">오시는 길</h2>
-            <div className="venue__name"><strong>{wedding.venue.name}</strong><span>{wedding.venue.hall}</span></div>
+            <div className="venue__name">
+              <strong>{wedding.venue.name}</strong><span>{wedding.venue.hall}</span>
+              <p className="venue__note"><small>화환 안내</small>{wedding.venue.flowerNotice}</p>
+            </div>
             <address>{wedding.venue.address}</address>
             <p className="venue__transit">{wedding.venue.transport}</p>
+            <p className="venue__note">
+              <small>대중교통 이용 안내</small>
+              {wedding.venue.parkingNotice}
+              <span>주차 및 출차에 관한 자세한 내용은 아래 <a href="#facilities">이용 안내</a>를 참고해 주세요.</span>
+            </p>
             <nav className="venue__links" aria-label="지도 서비스">
               <a href={naverMapUrl} target="_blank" rel="noreferrer" aria-label="네이버 지도에서 주소 보기"><img src={naverMapIcon} alt="" />네이버</a>
               <a href={kakaoMapUrl} target="_blank" rel="noreferrer" aria-label="카카오맵에서 주소 보기"><img src={kakaoMapIcon} alt="" />카카오</a>
               <a href={tmapMapUrl} aria-label="티맵에서 주소 보기"><img src={tmapIcon} alt="" />티맵</a>
             </nav>
+          </Reveal>
+        </section>
+
+        <section className="facilities section-pad" id="facilities" aria-labelledby="facilities-title">
+          <Reveal>
+            <p className="kicker">GUEST INFORMATION</p>
+            <h2 id="facilities-title">이용 안내</h2>
+            <dl>
+              <div>
+                <dt>주차 및 출차</dt>
+                <dd>{wedding.venue.parkingGuide}</dd>
+                <dd>{wedding.venue.departureGuide}</dd>
+              </div>
+              <div>
+                <dt>주차 정산</dt>
+                <dd>{wedding.venue.mainParkingPayment}</dd>
+                <dd>{wedding.venue.externalParkingPayment}</dd>
+              </div>
+              <div>
+                <dt>ATM</dt>
+                <dd>{wedding.venue.atm}</dd>
+                <dd>{wedding.venue.nearbyAtm}</dd>
+              </div>
+            </dl>
           </Reveal>
         </section>
 

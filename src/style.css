@@ -123,9 +123,17 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .venue__name span, .venue address, .venue__transit { color: rgba(255,255,255,.68); font-size: var(--font-meta); }
 .venue address { margin-top: 23px; font-style: normal; }
 .venue__transit { margin: 12px 0 0; line-height: 1.7; }
+.venue__note { max-width: 40em; margin: 24px 0 0; padding-left: 14px; display: grid; gap: 6px; border-left: 2px solid #b9bca6; font-size: var(--font-meta); line-height: 1.8; }
+.venue__note small { color: #b9bca6; font-size: var(--font-small); letter-spacing: .06em; }
 .venue__links { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 42px; }
 .venue__links a { min-height: 50px; display: flex; align-items: center; justify-content: center; gap: 7px; border: 1px solid rgba(255,255,255,.33); text-decoration: none; font-size: var(--font-ui); }
 .venue__links img { width: 20px; height: 20px; object-fit: contain; }
+.facilities h2 { margin: 0; font: 300 var(--font-section)/1.5 var(--font-serif); letter-spacing: .04em; }
+.facilities dl { margin: 40px 0 0; }
+.facilities dl > div { padding: 24px 0; border-top: 1px solid var(--line); }
+.facilities dt { font: 400 var(--font-subheading)/1.5 var(--font-serif); }
+.facilities dd { margin: 12px 0 0; font-size: var(--font-meta); line-height: 1.8; }
+.facilities dd + dd { margin-top: 8px; }
 .rsvp { text-align: center; background: var(--paper-deep); }
 .rsvp h2 { margin: 0; font: 300 var(--font-section)/1.5 var(--font-serif); letter-spacing: .04em; }
 .rsvp > .reveal > p:not(.kicker) { max-width: 430px; margin: 24px auto 0; color: var(--muted); font: 300 var(--font-body)/1.8 var(--font-serif); }
