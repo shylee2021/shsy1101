@@ -138,6 +138,13 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .rsvp h2 { margin: 0; font: 300 var(--font-section)/1.5 var(--font-serif); letter-spacing: .04em; }
 .rsvp > .reveal > p:not(.kicker) { max-width: 430px; margin: 24px auto 0; color: var(--muted); font: 300 var(--font-body)/1.8 var(--font-serif); }
 .rsvp > .reveal > button { min-height: 48px; margin-top: 36px; padding: 0 22px; border: 1px solid var(--ink); background: transparent; font-size: var(--font-ui); cursor: pointer; }
+.rsvp-notice { position: fixed; z-index: 90; left: 50%; bottom: calc(16px + env(safe-area-inset-bottom)); width: min(430px, calc(100% - 24px)); padding: 16px; transform: translateX(-50%); border: 1px solid var(--line); background: var(--paper); box-shadow: 0 6px 24px #292b2514; text-align: left; }
+.rsvp-notice h2 { margin: 0; padding-right: 28px; font: 400 var(--font-caption)/1.6 var(--font-serif); letter-spacing: 0; }
+.rsvp-notice__close { position: absolute; top: 0; right: 0; width: 44px; height: 44px; padding: 0; border: 0; background: transparent; color: var(--muted); font-size: 24px; font-weight: 300; cursor: pointer; }
+.rsvp-notice__row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; }
+.rsvp-notice__row p { margin: 0; color: #666757; font-size: var(--font-label); line-height: 1.8; }
+.rsvp-notice__action { flex-shrink: 0; min-height: 44px; padding: 0 15px; border: 0; background: var(--olive); color: var(--paper); font-size: var(--font-small); cursor: pointer; }
+html:has(dialog[open]) .rsvp-notice { display: none; }
 .rsvp-dialog { width: min(480px, calc(100% - 24px)); max-width: none; max-height: calc(100dvh - 24px); padding: 0; border: 0; background: var(--paper); color: var(--ink); text-align: left; }
 .rsvp-dialog[open] { display: grid; grid-template-rows: auto minmax(0, 1fr); }
 .rsvp-dialog::backdrop { background: rgba(20,20,20,.68); }
@@ -161,6 +168,7 @@ body::before { content: ''; position: fixed; inset: 0; pointer-events: none; opa
 .rsvp-dialog__options input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 3px; }
 .rsvp-dialog__attendance { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; transition: opacity .15s ease; }
 .rsvp-dialog__attendance[data-disabled='true'] { opacity: .42; }
+.rsvp-dialog__attendance > :last-child { grid-column: 1 / -1; }
 .rsvp-dialog__hint { margin: -14px 0 0; color: var(--muted); font-size: var(--font-micro); }
 .rsvp-dialog__consent { padding-top: 20px; border-top: 1px solid var(--line); }
 .rsvp-dialog__consent label { display: flex; align-items: center; gap: 8px; font-size: var(--font-small); cursor: pointer; }

@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="ko">
+<title>RSVP headcount check</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<p id="result">Checking RSVP with mocked requests…</p>
+<div style="height: 100vh" aria-hidden="true"></div>
+<div id="root"></div>
+<script type="module">
+  import { createElement as h } from 'react'
+  import { createRoot } from 'react-dom/client'
+  import Rsvp from '/src/Rsvp.tsx'
+  import '/src/style.css'
+
+  const requests = []
+  const storage = [[sessionStorage, 'rsvp-notice-dismissed'], [localStorage, 'rsvp-submitted']].map(([store, key]) => [store, key, store.getItem(key)])
+  storage.forEach(([store, key]) => store.removeItem(key))
+  const originalFetch = window.fetch
+  window.fetch = async (url, options) => {
+    if (!String(url).endsWith('/rest/v1/rsvp') || options.method !== 'POST') throw new Error('Unexpected request')
+    requests.push(JSON.parse(options.body))
+    return new Response(null, { status: 201 })
+  }
+  const root = createRoot(document.getElementById('root'))
+  function assert(value, message) { if (!value) throw new Error(message) }
+  async function until(condition) {
+    for (let i = 0; i < 80; i++) {
+      if (condition()) return
+      await new Promise(resolve => setTimeout(resolve, 25))
+    }
+    throw new Error('Timed out: ' + condition)
+  }
+  try {
+    root.render(h(Rsvp, { notify() {} }))
+    await until(() => document.querySelector('.rsvp-dialog'))
+    assert(document.querySelector('.rsvp-notice'), 'Show the notice immediately without scrolling')
+    assert(!document.querySelector('.rsvp-notice p br'), 'Notice copy must wrap naturally')
+    const noticeAction = document.querySelector('.rsvp-notice__action')
+    const scroll = window.scrollY
+    noticeAction.click()
+    await until(() => document.querySelector('.rsvp-dialog').open)
+    assert(!document.querySelector('.rsvp-notice').getClientRects().length, 'Hide notice while a dialog is open')
+    document.querySelector('.rsvp-dialog > header button').click()
+    await until(() => document.activeElement === noticeAction)
+    assert(Math.abs(window.scrollY - scroll) < 1, 'Closing returns focus without jumping to the RSVP section')
+    document.querySelector('.rsvp-notice__close').click()
+    await until(() => !document.querySelector('.rsvp-notice'))
+    assert(sessionStorage.getItem('rsvp-notice-dismissed') === '1', 'Remember dismissal for this visit')
+    root.render(null)
+    await until(() => !document.querySelector('.rsvp-dialog'))
+    root.render(h(Rsvp, { notify() {} }))
+    await until(() => document.querySelector('.rsvp-dialog'))
+    await new Promise(resolve => setTimeout(resolve, 100))
+    assert(!document.querySelector('.rsvp-notice'), 'Dismissed notices do not return on remount')
+    const dialog = document.querySelector('.rsvp-dialog')
+    const form = dialog.querySelector('form')
+    const adult = form.elements.namedItem('adult_count')
+    const child = form.elements.namedItem('child_count')
+    async function open() {
+      document.querySelector('.rsvp > .reveal > button').click()
+      form.elements.namedItem('name').value = '테스트'
+      form.querySelector('[name=side][value=groom]').click()
+      form.querySelector('[name=attending][value=yes]').click()
+      form.querySelector('[type=checkbox]').checked = true
+      await until(() => !adult.disabled && !child.disabled)
+      form.elements.namedItem('meal_type').value = 'yes'
+    }
+    assert(adult.disabled && child.disabled, 'Headcounts stay disabled until attendance is selected')
+    assert(adult.value === '1' && child.value === '0', 'Default to one adult and zero children')
+    await open()
+    adult.value = '2'
+    child.value = '1'
+    form.requestSubmit()
+    await until(() => !dialog.open)
+    assert(requests.length === 1 && requests[0].party_size === 3 && requests[0].child_count === 1, 'Store total and children separately')
+    assert(adult.value === '1' && child.value === '0', 'Successful submission resets headcounts')
+    assert(localStorage.getItem('rsvp-submitted') === '1', 'Successful submissions suppress future reminders')
+
+    await open()
+    adult.value = '10'
+    child.value = '1'
+    form.requestSubmit()
+    await until(() => form.querySelector('[role=alert]'))
+    assert(requests.length === 1 && dialog.open, 'Reject totals over ten before making a request')
+    adult.value = '1'
+    child.value = '9'
+    form.requestSubmit()
+    await until(() => !dialog.open)
+    assert(requests.length === 2 && requests[1].party_size === 10 && requests[1].child_count === 9, 'Allow the maximum total of ten')
+
+    await open()
+    adult.value = '2'
+    child.value = '3'
+    form.querySelector('[name=attending][value=no]').click()
+    await until(() => adult.disabled && child.disabled)
+    form.requestSubmit()
+    await until(() => !dialog.open)
+    const last = requests.at(-1)
+    assert(requests.length === 3 && !last.attending && last.party_size === 1 && last.child_count === 0 && last.meal_type === 'undecided', 'Nonattendance ignores stale headcounts and preserves legacy normalization')
+    document.body.dataset.result = 'passed'
+    document.getElementById('result').textContent = 'Passed: notice timing, dismissal, dialog hiding, focus/scroll restoration, natural wrapping, adult/child totals, limits, reset and nonattendance. No real requests.'
+  } catch (error) {
+    document.body.dataset.result = 'failed'
+    document.getElementById('result').textContent = `FAILED after ${requests.length} mock submissions: ${error.message}`
+  } finally {
+    root.unmount()
+    window.fetch = originalFetch
+    storage.forEach(([store, key, value]) => value === null ? store.removeItem(key) : store.setItem(key, value))
+  }
+</script>
+</html>

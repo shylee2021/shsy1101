@@ -17,10 +17,21 @@ begin
   ), 'Both IDs must be generated-always identities.';
 
   assert (
-    select count(*) = 7 from pg_constraint
+    select count(*) = 8 from pg_constraint
     where conrelid in ('public.guestbook'::regclass, 'public.rsvp'::regclass)
       and contype = 'c' and convalidated
-  ), 'The seven exported check constraints must be present and validated.';
+  ), 'The eight exported check constraints must be present and validated.';
+
+  assert (
+    select attnotnull from pg_attribute
+    where attrelid = 'public.rsvp'::regclass and attname = 'child_count' and not attisdropped
+  ) is true, 'Child count must exist and be NOT NULL.';
+  assert (
+    select pg_get_expr(adbin, adrelid) = '0' from pg_attrdef
+    where adrelid = 'public.rsvp'::regclass and adnum = (
+      select attnum from pg_attribute where attrelid = 'public.rsvp'::regclass and attname = 'child_count'
+    )
+  ) is true, 'Older clients must default to zero children.';
 
   assert pg_get_serial_sequence('public.rsvp', 'id') = 'public.rsvp_id_seq';
   assert has_sequence_privilege('anon', 'public.rsvp_id_seq', 'USAGE');
@@ -30,6 +41,7 @@ begin
   assert not has_any_column_privilege('anon', 'public.guestbook', 'UPDATE');
   assert not has_table_privilege('anon', 'public.guestbook', 'DELETE');
   assert has_column_privilege('anon', 'public.rsvp', 'name', 'INSERT');
+  assert has_column_privilege('anon', 'public.rsvp', 'child_count', 'INSERT');
   assert not has_any_column_privilege('anon', 'public.rsvp', 'SELECT');
   assert not has_any_column_privilege('anon', 'public.rsvp', 'UPDATE');
   assert not has_table_privilege('anon', 'public.rsvp', 'DELETE');

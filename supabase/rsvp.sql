@@ -6,6 +6,7 @@ create table if not exists public.rsvp (
   side text not null,
   attending boolean not null,
   party_size integer not null default 1,
+  child_count integer not null default 0,
   meal_type text not null,
   message text null,
   created_at timestamp with time zone not null default now(),
@@ -14,12 +15,13 @@ create table if not exists public.rsvp (
   constraint rsvp_message_check check (message is null or length(message) <= 500),
   constraint rsvp_name_check check (length(name) >= 1 and length(name) <= 40),
   constraint rsvp_party_size_check check (party_size >= 1 and party_size <= 10),
+  constraint rsvp_child_count_check check (child_count >= 0 and child_count < party_size),
   constraint rsvp_side_check check (side = any (array['groom'::text, 'bride'::text]))
 ) tablespace pg_default;
 
 alter table public.rsvp enable row level security;
 revoke all on public.rsvp from anon, authenticated;
-grant insert (name, side, attending, party_size, meal_type, message) on public.rsvp to anon;
+grant insert (name, side, attending, party_size, child_count, meal_type, message) on public.rsvp to anon;
 grant usage on sequence public.rsvp_id_seq to anon;
 
 drop policy if exists rsvp_insert on public.rsvp;
