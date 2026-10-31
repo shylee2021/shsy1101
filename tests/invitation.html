@@ -177,6 +177,7 @@
         assert(Math.round(buttonRect.width) >= 44 && Math.round(buttonRect.height) >= 44, 'Borderless copy actions must retain a 44px tap target')
         assert(buttonRect.left >= rowRect.left - 1 && buttonRect.right <= rowRect.right + 1, 'Copy buttons must fit even on narrow screens')
         assert(row.querySelector('button').getAttribute('aria-label') === `${account.label} ${account.holder} 계좌번호 복사`, 'Copy buttons must identify their account accessibly')
+        assert(row.querySelector('button').textContent.trim() === `${account.label} 계좌 복사`, 'Visible copy labels must identify the recipient before tapping')
         row.querySelector('button').click()
         await until(() => document.querySelector('.toast').textContent === `${account.holder} 님의 계좌번호를 복사했습니다.`)
       }

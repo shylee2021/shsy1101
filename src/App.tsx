@@ -214,7 +214,7 @@ export default function App() {
                 {group.entries.map((account) => (
                   <div className="account__body" key={account.label}>
                     <p><span><small>{account.label}</small> {account.holder}</span><small>{account.bank} {account.number}</small></p>
-                    <button type="button" onClick={() => copyAccount(account)} aria-label={`${account.label} ${account.holder} 계좌번호 복사`}><Icon name="copy" /> 복사</button>
+                    <button type="button" onClick={() => copyAccount(account)} aria-label={`${account.label} ${account.holder} 계좌번호 복사`}><Icon name="copy" /> {account.label} 계좌 복사</button>
                   </div>
                 ))}
               </details>

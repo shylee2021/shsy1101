@@ -52,8 +52,8 @@ export const invitation = {
       entries: [
         {
           label: '신랑',
-          bank: '국민은행',
-          number: '445302-04-127854',
+          bank: '카카오뱅크',
+          number: '3333-03-9353498',
           holder: '이상혁',
         },
         {
